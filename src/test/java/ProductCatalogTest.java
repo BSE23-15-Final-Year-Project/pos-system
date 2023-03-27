@@ -10,7 +10,7 @@
      void testAddProduct() {
          // Test adding a new product to the catalog
          ProductCatalog catalog = ProductCatalog.getInstance();
-         catalog.addProduct(ProductType.ELECTRONICS.toString(), "Smartwatch", 200.0);
+         catalog.addProduct(ProductType.ELECTRONICS.toString(), "Smartwatch", 200.0, "Apple Smart watch");
          Assertions.assertEquals(4, catalog.getProductCount());
      }
 
@@ -30,7 +30,7 @@
      void testProductType() {
          // Test getting a product from the catalog
          ProductCatalog catalog = ProductCatalog.getInstance();
-         catalog.addProduct(ProductType.CLOTHING.toString(), "Jeans", 50.0);
+         catalog.addProduct(ProductType.CLOTHING.toString(), "Jeans", 50.0, "Perfect jeans for your shape");
          ProductType type = catalog.getProductType("Jeans");
          Assertions.assertEquals(ProductType.CLOTHING, type);
      }

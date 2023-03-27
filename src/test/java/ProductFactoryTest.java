@@ -7,31 +7,31 @@ public class ProductFactoryTest {
      void testCreateProduct() {
          // Test creating an Electronics product
          ProductFactory productFactory = new ProductFactory();
-         Product electronics = productFactory.createProduct(ProductType.ELECTRONICS.toString(), "Laptop", 1000.0);
+         Product electronics = productFactory.createProduct(ProductType.ELECTRONICS.toString(), "Laptop", 1000.0, "This is an electronic product");
          Assertions.assertEquals("Laptop", electronics.getName());
          Assertions.assertEquals(1000.0, electronics.getPrice());
          Assertions.assertTrue(electronics instanceof Electronics);
 
          // Test creating a Groceries product
-         Product groceries = productFactory.createProduct(ProductType.GROCERIES.toString(), "Banana", 1.0);
+         Product groceries = productFactory.createProduct(ProductType.GROCERIES.toString(), "Banana", 1.0, "This is a groceries product");
          Assertions.assertEquals("Banana", groceries.getName());
          Assertions.assertEquals(1.0, groceries.getPrice());
          Assertions.assertTrue(groceries instanceof Groceries);
 
          // Test creating a Clothing product
-         Product clothing = productFactory.createProduct(ProductType.CLOTHING.toString(), "Jeans", 50.0);
+         Product clothing = productFactory.createProduct(ProductType.CLOTHING.toString(), "Jeans", 50.0 , "This is a clothing product");
          Assertions.assertEquals("Jeans", clothing.getName());
          Assertions.assertEquals(50.0, clothing.getPrice());
          Assertions.assertTrue(clothing instanceof Clothing);
 
          // Test creating an invalid product type
          Assertions.assertThrows(IllegalArgumentException.class, () -> {
-             productFactory.createProduct("Invalid Type", "Invalid Product", 0.0);
+             productFactory.createProduct("Invalid Type", "Invalid Product", 0.0, "Invalid");
          });
 
          // Test null product type
          Assertions.assertThrows(NullPointerException.class, () -> {
-             productFactory.createProduct(null, "Null Product Type",0.0);
+             productFactory.createProduct(null, "Null Product Type",0.0, "Null");
          });
      }
  }

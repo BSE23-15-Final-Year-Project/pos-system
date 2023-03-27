@@ -1,19 +1,23 @@
 package org.pos;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 public class ProductCatalog {
     private static ProductCatalog instance;
     private Map<String, Product> products;
-    
+    private Set<CartObserver> observers = new HashSet<>();
+
+
     private ProductCatalog() {
         products = new HashMap<>();
         // Add some initial products to the catalog
-        addProduct(ProductType.ELECTRONICS.toString(), "Smartphone", 500.0);
-        addProduct(ProductType.GROCERIES.toString(), "Bread", 2.0);
-        addProduct(ProductType.CLOTHING.toString(), "T-shirt", 10.0);
+        addProduct(ProductType.ELECTRONICS.toString(), "Smartphone", 500.0, "brand new Samsung");
+        addProduct(ProductType.GROCERIES.toString(), "Bread", 2.0, "Milk bread for your breakfast");
+        addProduct(ProductType.CLOTHING.toString(), "T-shirt", 10.0, "classic shirt");
     }
     
     public static synchronized ProductCatalog getInstance() {
@@ -23,15 +27,16 @@ public class ProductCatalog {
         return instance;
     }
     
-    public void addProduct(String productType, String name, double price) {
+    public void addProduct(String productType, String name, double price, String description) {
         try {
             ProductType.valueOf(productType);
         }catch (IllegalArgumentException exception){
             throw new IllegalArgumentException("Product Type is invalid");
         }
         ProductFactory factory = new ProductFactory();
-        Product product = factory.createProduct(productType, name, price);
+        Product product = factory.createProduct(productType, name, price, description);
         products.put(product.getName(), product);
+        notifyObservers(product);
     }
     
     public Product getProduct(String name) {
@@ -50,6 +55,21 @@ public class ProductCatalog {
         System.out.println("Product Catalog:");
         for (Product product : products.values()) {
             product.display();
+        }
+    }
+
+
+    public void addObserver(CartObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(CartObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers(Product product) {
+        for (CartObserver observer : observers) {
+            observer.update(product);
         }
     }
 }

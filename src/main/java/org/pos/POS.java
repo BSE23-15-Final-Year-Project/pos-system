@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class POS {
     public static void main(String[] args) {
-        String productName, productType;
+        String productName, productType, description;
         Double productPrice;
         System.out.println("\t\t.................Welcome to Wandegeya Supermarket..............");
         System.out.println("\t\t\t\t................Menu................");
@@ -30,8 +30,11 @@ public class POS {
                 System.out.println("Product Price : ");
                 productPrice = Double.parseDouble(scanner.nextLine().toUpperCase());
 
+                System.out.println("Product Description : ");
+                description = scanner.nextLine();
+
                 // add the product
-                catalog.addProduct(productType, productName, productPrice);
+                catalog.addProduct(productType, productName, productPrice, description);
                 // Display the updated catalog
                 catalog.displayCatalog();
             }catch (Exception exception){
