@@ -60,11 +60,11 @@ public class ProductCatalog {
 
 
     public void addObserver(CartObserver observer) {
-        observers.add(observer);
+        this.observers.add(observer);
     }
 
     public void removeObserver(CartObserver observer) {
-        observers.remove(observer);
+        this.observers.remove(observer);
     }
 
     public void notifyObservers(Product product) {
