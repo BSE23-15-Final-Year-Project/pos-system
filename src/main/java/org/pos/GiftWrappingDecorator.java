@@ -7,6 +7,7 @@ public class GiftWrappingDecorator extends ProductDecorator {
     public GiftWrappingDecorator(Product decoratedProduct, double wrappingCost) {
         super(decoratedProduct);
         this.wrappingCost = wrappingCost;
+        this.decoratedProduct = decoratedProduct;
     }
 
     public double getPrice() {
@@ -20,7 +21,7 @@ public class GiftWrappingDecorator extends ProductDecorator {
 
     @Override
     public void display() {
-        System.out.println("Gift Wrapped - $" + wrappingCost);
+        System.out.println("Name: " + decoratedProduct.getName()+", Description: " +description()+ ", Total Price - " + (wrappingCost + decoratedProduct.getPrice()));
     }
 
 }

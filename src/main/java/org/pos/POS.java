@@ -8,12 +8,17 @@ public class POS {
         Double productPrice;
         System.out.println("\t\t.................Welcome to Wandegeya Supermarket..............");
         System.out.println("\t\t\t\t................Menu................");
-        System.out.println("1. Add Product \n2. Display Product Catalog\n3. Display Specific Product");
+        System.out.println("1. Add Product \n2. Display Product Catalog\n3. Display Specific Product\n4. Add product to cart");
         Scanner scanner = new Scanner(System.in);
         String menuItemSelected = scanner.nextLine();
 
         // Get the singleton instance of the product catalog
         ProductCatalog catalog = ProductCatalog.getInstance();
+
+        // add observer
+        CartObserver observer = new SalesPerson("Hastings Tugume");
+        catalog.addObserver(observer);
+
         
         // Add a new product to the catalog
         if (menuItemSelected.equals("1")) {
@@ -48,7 +53,35 @@ public class POS {
             System.out.println("Which product do you want to view ?");
             Product product = catalog.getProduct(scanner.nextLine().trim());
             System.out.println("Name: " + product.getName() + ", Price: " + product.getPrice());
+        }else if(menuItemSelected.equals("4")){
+            // create shopping cart
+            ShoppingCart cart = new ShoppingCart(catalog);
+
+            // add items to cart
+            cart.addItem("Smartphone");
+            cart.addItem("Bread");
+            cart.addItem("T-shirt");
+
+            // add gift wrap to TV
+            Product phone = cart.getItems().get(0);
+            phone = new GiftWrappingDecorator(phone, 200);
+            cart.removeItem(cart.getItems().get(0));
+            cart.getItems().add(phone);
+
+            // add express shipping to bananas
+            Product bread = cart.getItems().get(1);
+            bread = new ExpressShippingDecorator(bread, 5000);
+            cart.removeItem(cart.getItems().get(1));
+            cart.getItems().add(bread);
+
+            // display items in cart
+            cart.displayItems();
+
+            // display total price
+            System.out.println("Total: " + cart.getTotal() + "/=");
         }
+
+
         scanner.close();
     }
 }

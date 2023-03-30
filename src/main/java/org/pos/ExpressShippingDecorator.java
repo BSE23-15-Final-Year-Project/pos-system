@@ -6,6 +6,7 @@ public class ExpressShippingDecorator extends ProductDecorator {
     public ExpressShippingDecorator(Product decoratedProduct, double shippingCost) {
         super(decoratedProduct);
         this.shippingCost = shippingCost;
+        this.decoratedProduct = decoratedProduct;
     }
 
     public double getPrice() {
@@ -14,7 +15,7 @@ public class ExpressShippingDecorator extends ProductDecorator {
 
     @Override
     public void display() {
-        System.out.println("Express Shipping - " + shippingCost);
+        System.out.println("Name: "+decoratedProduct.getName() + ", Description: " + description()+ ", TotalPrice - " + (shippingCost + decoratedProduct.getPrice()));
     }
 
     @Override
