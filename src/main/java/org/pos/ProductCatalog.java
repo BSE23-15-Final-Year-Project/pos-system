@@ -36,7 +36,6 @@ public class ProductCatalog {
         ProductFactory factory = new ProductFactory();
         Product product = factory.createProduct(productType, name, price, description);
         products.put(product.getName(), product);
-        notifyObservers(product);
     }
     
     public Product getProduct(String name) {
