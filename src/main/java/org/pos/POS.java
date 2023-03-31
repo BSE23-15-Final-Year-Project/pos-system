@@ -14,11 +14,6 @@ public class POS {
 
         // Get the singleton instance of the product catalog
         ProductCatalog catalog = ProductCatalog.getInstance();
-
-        // add observer
-        CartObserver observer = new SalesPerson("Hastings Tugume");
-        catalog.addObserver(observer);
-
         
         // Add a new product to the catalog
         if (menuItemSelected.equals("1")) {
@@ -57,18 +52,22 @@ public class POS {
             // create shopping cart
             ShoppingCart cart = new ShoppingCart(catalog);
 
+            // add observer
+            CartObserver observer = new SalesPerson("Hastings Tugume");
+            cart.addObserver(observer);
+
             // add items to cart
             cart.addItem("Smartphone");
             cart.addItem("Bread");
             cart.addItem("T-shirt");
 
-            // add gift wrap to TV
+            // add gift wrap to phone
             Product phone = cart.getItems().get(0);
             phone = new GiftWrappingDecorator(phone, 200);
             cart.removeItem(cart.getItems().get(0));
             cart.getItems().add(phone);
 
-            // add express shipping to bananas
+            // add express shipping to bread
             Product bread = cart.getItems().get(1);
             bread = new ExpressShippingDecorator(bread, 5000);
             cart.removeItem(cart.getItems().get(1));

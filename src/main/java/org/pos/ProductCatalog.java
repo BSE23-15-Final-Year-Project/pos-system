@@ -9,7 +9,6 @@ import java.util.Set;
 public class ProductCatalog {
     private static ProductCatalog instance;
     private Map<String, Product> products;
-    private Set<CartObserver> observers = new HashSet<>();
 
 
     private ProductCatalog() {
@@ -54,21 +53,6 @@ public class ProductCatalog {
         System.out.println("Product Catalog:");
         for (Product product : products.values()) {
             product.display();
-        }
-    }
-
-
-    public void addObserver(CartObserver observer) {
-        this.observers.add(observer);
-    }
-
-    public void removeObserver(CartObserver observer) {
-        this.observers.remove(observer);
-    }
-
-    public void notifyObservers(Product product) {
-        for (CartObserver observer : observers) {
-            observer.update(product);
         }
     }
 }

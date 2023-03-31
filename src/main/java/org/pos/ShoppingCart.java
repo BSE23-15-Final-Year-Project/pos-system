@@ -1,10 +1,13 @@
 package org.pos;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ShoppingCart {
     private List<Product> items;
+    private Set<CartObserver> observers = new HashSet<>();
     private ProductCatalog productCatalog;
     public ShoppingCart(ProductCatalog productCatalog) {
         items = new ArrayList<>();
@@ -15,7 +18,7 @@ public class ShoppingCart {
         Product product = productCatalog.getProduct(productName);
         if (product != null) {
             items.add(product);
-            productCatalog.notifyObservers(product);
+            notifyObservers(product);
         } else {
             System.out.println("Product not found in catalog.");
         }
@@ -46,6 +49,21 @@ public class ShoppingCart {
             for (Product item : items) {
                 item.display();
             }
+        }
+    }
+
+
+    public void addObserver(CartObserver observer) {
+        this.observers.add(observer);
+    }
+
+    public void removeObserver(CartObserver observer) {
+        this.observers.remove(observer);
+    }
+
+    public void notifyObservers(Product product) {
+        for (CartObserver observer : observers) {
+            observer.update(product);
         }
     }
 
