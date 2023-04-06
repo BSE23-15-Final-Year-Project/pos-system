@@ -1,10 +1,12 @@
 package org.pos;
 
+import org.pos.exceptions.ProductNotFoundException;
+
 import java.util.Scanner;
 
 public class POS {
-    public static void main(String[] args) {
-        String productName, productType, description;
+    public static void main(String[] args) throws ProductNotFoundException {
+        String productName, productType, description, barcode;
         Double productPrice;
         System.out.println("\t\t.................Welcome to Wandegeya Supermarket..............");
         System.out.println("\t\t\t\t................Menu................");
@@ -33,8 +35,11 @@ public class POS {
                 System.out.println("Product Description : ");
                 description = scanner.nextLine();
 
+                System.out.println("Barcode: ");
+                barcode = scanner.nextLine();
+
                 // add the product
-                catalog.addProduct(productType, productName, productPrice, description);
+                catalog.addProduct(productType, productName, productPrice, description,barcode);
                 // Display the updated catalog
                 catalog.displayCatalog();
             }catch (Exception exception){
@@ -47,19 +52,23 @@ public class POS {
              // Get a product from the catalog
             System.out.println("Which product do you want to view ?");
             Product product = catalog.getProduct(scanner.nextLine().trim());
-            System.out.println("Name: " + product.getName() + ", Price: " + product.getPrice());
+            if(product == null){
+                System.out.println("Product does not exist!");
+                return;
+            }
+            System.out.println("Name: " + product.getName() + ", Price: " + product.getPrice() + ", Type: "+product.getClass().getSimpleName());
         }else if(menuItemSelected.equals("4")){
             // create shopping cart
-            ShoppingCart cart = new ShoppingCart(catalog);
+            ShoppingCart cart = new ShoppingCart();
 
             // add observer
             CartObserver observer = new SalesPerson("Hastings Tugume");
             cart.addObserver(observer);
 
             // add items to cart
-            cart.addItem("Smartphone");
-            cart.addItem("Bread");
-            cart.addItem("T-shirt");
+            BarcodeScanner barcodeScanner = new BarcodeScanner();
+            barcodeScanner.scan(cart,"1234"); // add a smartphone
+            barcodeScanner.scan(cart,"5678"); // add bread
 
             // add gift wrap to phone
             Product phone = cart.getItems().get(0);
@@ -68,9 +77,9 @@ public class POS {
             cart.getItems().add(phone);
 
             // add express shipping to bread
-            Product bread = cart.getItems().get(1);
+            Product bread = cart.getItems().get(0);
             bread = new ExpressShippingDecorator(bread, 5000);
-            cart.removeItem(cart.getItems().get(1));
+            cart.removeItem(cart.getItems().get(0));
             cart.getItems().add(bread);
 
             // display items in cart
@@ -78,6 +87,32 @@ public class POS {
 
             // display total price
             System.out.println("Total: " + cart.getTotal() + "/=");
+
+            System.out.println("1. Process to checkout\t\t2. Continue Shopping");
+
+            // payment
+            String option = scanner.nextLine();
+            if(option.equals("1")){
+                PaymentStrategy paymentStrategy = null;
+                System.out.println("Please choose payment mode");
+                System.out.println("1. Cash\t\t2.Credit card");
+                option = scanner.nextLine();
+                if(option.equals("1")){
+                    paymentStrategy =  new CashPaymentStrategy(); // paying cash
+                } else if (option.equals("2")) {
+                    System.out.println("Enter the card number");
+                    String cardNo = scanner.nextLine();
+                    System.out.println("Card expiry date");
+                    String expiryDate = scanner.nextLine();
+                    System.out.println("CVV");
+                    String cvv = scanner.nextLine();
+                    paymentStrategy = new CreditCardPaymentStrategy(cardNo, expiryDate, cvv); // paying with credit card
+                } else {
+                    System.out.println("invalid Payment option");
+                }
+                PaymentContext paymentContext = new PaymentContext(paymentStrategy);
+                System.out.println(paymentContext.processPayment(cart.getTotal()));
+            }
         }
 
 

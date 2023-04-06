@@ -9,19 +9,14 @@ public class ShoppingCart {
     private List<Product> items;
     private Set<CartObserver> observers = new HashSet<>();
     private ProductCatalog productCatalog;
-    public ShoppingCart(ProductCatalog productCatalog) {
+    public ShoppingCart() {
         items = new ArrayList<>();
-        this.productCatalog = productCatalog;
     }
 
     public void addItem(String productName) {
-        Product product = productCatalog.getProduct(productName);
-        if (product != null) {
-            items.add(product);
-            notifyObservers(product);
-        } else {
-            System.out.println("Product not found in catalog.");
-        }
+        Product product = ProductCatalog.getInstance().getProduct(productName);
+        items.add(product);
+        notifyObservers(product);
     }
 
     public void removeItem(Product product) {
