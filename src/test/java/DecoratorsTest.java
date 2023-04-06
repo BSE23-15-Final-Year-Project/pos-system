@@ -6,7 +6,7 @@ import org.pos.ProductFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GiftWrappingDecoratorTest {
+public class DecoratorsTest {
     ProductFactory factory = new ProductFactory();
     @Test
     public void testGiftWrappingDecorator() {
